@@ -48,7 +48,7 @@ Next up, same sort of query to [c]https://api.skype.com/partners/999/usermap[/c]
   "partnerUsername": <email address> // Yeah, this is my WL login name.
 }
 [/code]
-Note that [c]partnerUsername[/c] and [c]username[/c] can be related: for me, [c]live:alice_1[/c] and [c]alice@hotmail.co.uk[/c] respectively.
+Note that [c]partnerUsername[/c] and [c]username[/c] can be related: for me, [c]live:alice_1[/c] and [c]alice@hotmail.co.uk[/c] respectively. Interesting that there's a 999 in the URL as well as returned in the first login token. Also note: If you omit [c]jsoncallback[/c] you get regular JSON out.
 
 I guess this is how Skype knows what username to use later on given I entered [c]partnerUsername[/c] when logging in but [c]username[/c] is used once log in.
 
