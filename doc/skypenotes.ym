@@ -1,0 +1,163 @@
+title: Skype protocol notes
+----
+It looks a lot like [url=http://code.google.com/p/msnp-sharp/wiki/KB_MSNP21]msnp21[/url] with a different login process.
+
+[h1]Login[/h1]
+
+If you log in with a MS Account, you start (in the MSNP stream) by being referred to as [c]1:alice@hotmail.co.uk[/c] and end up as something more like [c]8:live:alice_1[/c], 8 apparently being the namespace for Skype users. Looks like the [url=http://msdn.microsoft.com/en-us/library/live/hh243647.aspx#implicitgrant]documented[/url] process for logging in to Windows Live, with scope [c]service::skype.com::MBI_SSL[/c] (there's mention of ambientssl in later in the MSNP21 parts!) and client ID [c]00000000480BC46C[/c]
+
+Follow that, eventually you get a redirection to the URL you requested as the callback (Skype requests [c]https://login.live.com/oauth20_desktop.srf?lc=2033[/c]) with a big fragment and a fuckton of cookies. Note that so long as you use Skype's client ID you pretty much [i]have[/i] to use that URL. WL will complain if you use anything it doesn't like, which is probably any other URL given that Skype is a desktop application.
+
+[pre]
+access_token=<lots of base64>
+refresh_token=<a bit less base64>
+token_type=bearer
+expires_in=86400
+scope=service::skype.com::MBI_SSL
+state=999
+user_id=<a bunch of hex> // I guess this is one of the forms of UID that WL uses?
+[/pre]
+
+Skype then requests [c]https://api.skype.com/rps/me[/c] with query parameters
+[pre]
+jsoncallback=<valid JS name>
+access_token=<the token we got from l.l.c>
+_=<some number>
+[/pre]
+and gets back some JSON wrapped in a call to the function named by [c]jsoncallback[/c]. Guess it's a very basic profile information.
+[code=JS]
+{
+  "gender": "m",
+  "siteId": 287688,
+  "firstName": "REDA",
+  "cid": <a bunch of hex>, // same thing l.l.c gave us in user_id
+  "siteName": "skype.com",
+  "lastName": "CTED",
+  "country": "UK",
+  "email": <a mail address>, // It's the one I entered during the oauth2 stuff, no idea if that's important or not.
+  "birthdate": <date in big-endian format> 
+}
+[/code]
+
+Next up, same sort of query to [c]https://api.skype.com/partners/999/usermap[/c] except now there's [c]_accept=1.0[/c] in the query too:
+[code=JS]
+{
+  "uid": <hex> , // WL CID again.
+  "username": <some string>, //remember this, it'll be important when we get to the MSNP parts.
+  "status": "ACTIVE", // Account is enabled?
+  "partnerUsername": <email address> // Yeah, this is my WL login name.
+}
+[/code]
+Note that [c]partnerUsername[/c] and [c]username[/c] can be related: for me, [c]live:alice_1[/c] and [c]alice@hotmail.co.uk[/c] respectively.
+
+I guess this is how Skype knows what username to use later on given I entered [c]partnerUsername[/c] when logging in but [c]username[/c] is used once log in.
+
+The [c]refresh_token[/c] is then used to get more authentication tokens, post to [c]https://login.live.com/oauth20_token.srf[/c] with urlencoded body
+[pre]
+grant_type=refresh_token
+client_id=00000000480BC46C
+scope=<varies>
+refresh_token=<the refresh token from login>
+[/pre]
+
+Not sure what it's for, but the scopes
+[pre]
+service::login.skype.com::MBI_SSL
+service::contacts.msn.com::MBI_SSL
+service::m.hotmail.com::MBI_SSL
+service::ssl.live.com::MBI_SSL
+[/pre]
+are used.
+
+[h1]Contacts list[/h1]
+This appears to use a mutant version of exchange activesync. Have a wbxml decoder ready. It also uses SOAP in places. The first request is SOAP to [c]https://proxy-blu-people.directory.live.com/abservice/SharingService.asmx[/c], and looks like this:
+[code=XML]
+<?xml version='1.0' encoding='utf-8'?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+  <soap:Header>
+    <ABApplicationHeader xmlns="http://www.msn.com/webservices/AddressBook">
+      <ApplicationId>F6D2794D-501F-443A-ADBE-8F1490FF30FD</ApplicationId>
+      <IsMigration>false</IsMigration>
+      <PartnerScenario>InviteResponse</PartnerScenario>
+      <CacheKey><!-- some long base64 string --></CacheKey>
+    </ABApplicationHeader>
+    <ABAuthHeader xmlns="http://www.msn.com/webservices/AddressBook">
+      <ManagedGroupRequest>false</ManagedGroupRequest>
+      <TicketToken><!-- the access_token for service::contacts.msn.com::MBI_SSL --></TicketToken>
+    </ABAuthHeader>
+  </soap:Header>
+  <soap:Body>
+    <FindMembershipByRole xmlns="http://www.msn.com/webservices/AddressBook">
+      <serviceFilter>
+        <Types>
+          <ServiceType>Messenger</ServiceType>
+        </Types>
+      </serviceFilter>
+      <includedRoles>
+        <RoleId>Pending</RoleId>
+      </includedRoles>
+      <view>Full</view>
+      <expandMembership>true</expandMembership>
+    </FindMembershipByRole>
+  </soap:Body>
+</soap:Envelope>
+[/code]
+
+Response:
+[code=XML]
+<?xml version='1.0' encoding='utf-8'?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Header>
+    <ServiceHeader xmlns="http://www.msn.com/webservices/AddressBook">
+      <Version>17.3.1483.1118</Version>
+      <CacheKeyChanged>false</CacheKeyChanged>
+      <PreferredHostName>proxy-blu-people.directory.live.com</PreferredHostName>
+      <SessionId>ABCH.a19de4c1-28fa-4432-8c9e-959c5eaba9e7</SessionId>
+    </ServiceHeader>
+  </soap:Header>
+  <soap:Body>
+    <FindMembershipByRoleResponse xmlns="http://www.msn.com/webservices/AddressBook">
+      <FindMembershipByRoleResult>
+        <OwnerNamespace>
+          <Info>
+            <Handle>
+              <Id>00000000-0000-0000-0000-000000000000</Id>
+              <IsPassportNameHidden>false</IsPassportNameHidden>
+              <CID>0</CID>
+            </Handle>
+            <CreatorPuid>0</CreatorPuid>
+            <CreatorCID><!-- number which is presumaby the CID from above read as a signed integer --></CreatorCID>
+            <CreatorPassportName>REDACTED@hotmail.co.uk</CreatorPassportName>
+            <CircleAttributes>
+              <IsPresenceEnabled>false</IsPresenceEnabled>
+              <Domain>None</Domain>
+            </CircleAttributes>
+            <MessengerApplicationServiceCreated>false</MessengerApplicationServiceCreated>
+          </Info>
+          <Changes/>
+          <CreateDate>2005-09-23T05:56:24.933-07:00</CreateDate>
+          <LastChange>2014-01-05T14:12:34.827-08:00</LastChange>
+        </OwnerNamespace>
+      </FindMembershipByRoleResult>
+    </FindMembershipByRoleResponse>
+  </soap:Body>
+</soap:Envelope>
+[/code]
+Which is odd. The MSNP21 link above says the address with the zero UUID is used to create groupchats, so it's anyone's guess what that is.
+
+Then begins an ActiveSync conversation; starting by sending to [c]https://m.hotmail.com/Microsoft-Server-ActiveSync?jAkJBBBTa3lwZS0zMDI2NTQ3Nzk0AAxDbGFzc2ljU2t5cGU=[/c]. That query string is base64 for (in Ruby's string escaping, so "\xnn" is a 0xnn byte) [c]\x8C\t\t\x04\x10Skype-3026547794\x00\fClassicSkype[/c]. Currently not known exactly how that works; it may or may not be the documented form of activesync. The Authorization header contains "RPSToken", a space, and the access_token for [c]service::m.hotmail.com::MBI_SSL[/c]
+
+While that's going on, the Skype UI starts loading stuff, and there's another SOAP request, this time to [c]https://proxy-blu-people.directory.live.com/abservice/abservice.asmx[/c]. The request envelope is the same as the last one, the body is now
+[code=XML]
+<FindAllBlockedContacts xmlns="http://www.msn.com/webservices/AddressBook"/>
+[/code]
+With response body
+[code]
+<FindAllBlockedContactsResponse xmlns="http://www.msn.com/webservices/AddressBook">
+  <FindAllBlockedContactsResult/>
+</FindAllBlockedContactsResponse>
+[/code]
+I have no blocked contacts, so I don't know what would go in there.
+
+After that, it's msnp, looks like. Also like the contacts list is sent using activesync.
