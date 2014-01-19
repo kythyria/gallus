@@ -14,6 +14,8 @@ instead.
 ## login.rb
 Use the token you got above to make `state.json`:
 
-    {"initial": <the token>}
+    {
+        "tokens": {"initial": <the token>}
+    }
 
 then run this program. It'll rewrite `state.json` to include all the information gotten in the "Login" section of [the notes](../doc/skypenotes.ym).

@@ -16,7 +16,7 @@ def get_initial_token
     # TODO: Better place to stash the tokens
     # TODO: Hook this up to login-browserui
     j = JSON.parse(File.read("state.json"), :symbolize_names => true)
-    j[:initial]
+    j[:tokens][:initial]
 end
 
 def parse_json_response(res)
@@ -53,7 +53,8 @@ def get_skype_profile(tokens)
     output
 end
 
-t = do_auth
-t.merge! get_skype_profile(t)
+t = {}
+t[:tokens] = do_auth
+t[:profile] = get_skype_profile(t[:tokens])
 
 File.open("state.json","w") { |f| f.write(JSON.pretty_generate(t)) }
