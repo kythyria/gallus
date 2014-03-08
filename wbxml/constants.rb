@@ -1,4 +1,7 @@
 module Wbxml
+    #Version number
+    WBXML_13 = 0x03
+    
     # Global tokens
     SWITCH_PAGE = 0x0
     END_T       = 0x1 # END on its own is a reserved word
@@ -38,7 +41,7 @@ module Wbxml
         "-//WAPFORUM//DTD WTA-WML 1.2//EN",
         "-//WAPFORUM//DTD CHANNEL 1.2//EN"
     ]
-    ((PUBLICID.length)..0x7F).each { |i| PUBLICID[i] = sprintf("-//UNKNOWN//0x%02X",i) }
+    ((PUBLICID.length)..0xFF).each { |i| PUBLICID[i] = sprintf("-//UNKNOWN//0x%02X",i) }
     
     CHARSET = {3=>"US-ASCII", 4=>"ISO_8859-1:1987", 5=>"ISO_8859-2:1987", 6=>"ISO_8859-3:1988", 7=>"ISO_8859-4:1988", 8=>"ISO_8859-5:1988", 9=>"ISO_8859-6:1987",
                10=>"ISO_8859-7:1987", 11=>"ISO_8859-8:1988", 12=>"ISO_8859-9:1989", 13=>"ISO-8859-10", 14=>"ISO_6937-2-add", 15=>"JIS_X0201", 16=>"JIS_Encoding",

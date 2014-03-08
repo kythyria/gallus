@@ -109,7 +109,7 @@ This appears to use a mutant version of exchange activesync. Have a wbxml decode
 ```
 
 Response:
-[code=XML]
+```XML
 <?xml version='1.0' encoding='utf-8'?>
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <soap:Header>
@@ -147,7 +147,7 @@ Response:
     </FindMembershipByRoleResponse>
   </soap:Body>
 </soap:Envelope>
-[/code]
+```
 Which is odd. The MSNP21 link above says the address with the zero UUID is used to create groupchats, so it's anyone's guess what that is.
 
 Then begins an ActiveSync conversation; starting by sending to `https://m.hotmail.com/Microsoft-Server-ActiveSync?jAkJBBBTa3lwZS0zMDI2NTQ3Nzk0AAxDbGFzc2ljU2t5cGU=`. That query string is base64 for (in Ruby's string escaping, so "\xnn" is a 0xnn byte) `\x8C\t\t\x04\x10Skype-3026547794\x00\fClassicSkype`. Currently not known exactly how that works; it may or may not be the documented form of activesync. The Authorization header contains "RPSToken", a space, and the access_token for `service::m.hotmail.com::MBI_SSL`
@@ -165,3 +165,10 @@ With response body
 I have no blocked contacts, so I don't know what would go in there.
 
 After that, it's msnp, looks like. Also like the contacts list is only attainable using activesync.
+
+## Misc
+The backend doesn't do name translation between Messenger and Skype modes, so you see two different names used for you. One is 1:<ms account name>, the other is the one used for Skype itself.
+
+\/me is represented by adding the user's display name to the beginning of the message, and a header "Skype-EmoteOffset" with the length of that name.
+
+It looks like the Registration and Set-Registration headers are for a cookie.

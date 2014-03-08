@@ -102,6 +102,24 @@ module Wbxml
     end
     
     class MutableInlineStringTable
+        def initialize
+            @data = ""
+        end
         
+        def get_string!(str)
+            strn = str + "\x00" # TODO: Make this work with multibyte encodings
+            idx = @data.index(strn)
+            
+            if !index
+                idx = @data.length
+                @data += strn
+            end
+            
+            return idx
+        end
+        
+        def data
+            @data.force_encoding("ASCII-8BIT")
+        end
     end
 end

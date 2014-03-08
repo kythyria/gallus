@@ -55,3 +55,17 @@ GBL    Block List
 SKYPE  Skype Contacts
 WL     WindowsLive Contacts
 ```
+
+## Process
+Start with a FolderSync request.
+```XML
+<FolderSync>
+  <SyncKey>0</SyncKey>
+  <unknown:FE-05>
+    <unknown:FE-06>
+      <unknown:FE-07>SID</unknown:FE-07>
+    </unknown:FE-06>
+  </unknown:FE-05>
+</FolderSync>
+```
+I guess in this context the unknown fields are requesting the `SID` property to be included in the result. A `SyncKey` of zero seems to mean "I have nothing stored locally, give me everything".
