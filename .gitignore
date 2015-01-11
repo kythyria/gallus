@@ -1,5 +1,5 @@
 minitools/*.json
 *.o
 *.pro.user
-login-browserui/login-browserui
-login-browserui/login-browserui.pro.user.3.2-pre1
+login-browserui/login-browserui*
+login-browserui/login-browserui.pro.user*
