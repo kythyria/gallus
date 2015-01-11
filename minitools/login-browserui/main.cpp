@@ -2,12 +2,13 @@
 #include <QApplication>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QFile>
 #include <iostream>
 
-void writeStateJson(QUrl &lastUrl)
+void writeStateJson(QUrl &lastUrl, LoginBrowserUi *bui)
 {
 	QUrlQuery params(lastUrl.fragment(QUrl::FullyDecoded));
 	QJsonObject paramObj;
@@ -23,6 +24,8 @@ void writeStateJson(QUrl &lastUrl)
 
 	QJsonObject stateObj;
 	stateObj.insert("tokens", tokenObj);
+
+	stateObj.insert("cookies", bui->cookieJson());
 
 	QFile stateFile("state.json");
 	if(!stateFile.open(QIODevice::WriteOnly))
@@ -49,7 +52,7 @@ int main(int argc, char *argv[])
 
 	if(lasturl.url().startsWith(LoginBrowserUi::REDIRECT_URL))
 	{
-		writeStateJson(lasturl);
+		writeStateJson(lasturl, &w);
 		return aresult;
 	}
 	else

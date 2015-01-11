@@ -13,6 +13,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        loginbrowserui.cpp
+        loginbrowserui.cpp \
+    jsonwritingcookiejar.cpp
 
-HEADERS  += loginbrowserui.h
+HEADERS  += loginbrowserui.h \
+    jsonwritingcookiejar.h

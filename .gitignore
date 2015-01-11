@@ -1,1 +1,3 @@
 minitools/*.json
+*.o
+*.pro.user
