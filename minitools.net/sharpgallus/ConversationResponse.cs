@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Sharpgallus
 {
@@ -38,8 +39,31 @@ namespace Sharpgallus
         public List<ConversationUpdate> Conversations { get; set; }
     }
 
+    [JsonObject]
     public class ConversationUpdate
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
 
+        [JsonProperty("lastMessage")]
+        public dynamic LastMessage { get; set; }
+
+        [JsonProperty("messages")]
+        public Uri Messages { get; set; }
+
+        [JsonProperty("properties")]
+        public JObject Properties { get; set; }
+
+        [JsonProperty("targetLink")]
+        public Uri TargetLink { get; set; }
+
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("version")]
+        public ulong Version { get; set; }
+
+        [JsonProperty("threadProperties")]
+        public JObject ThreadProperties { get; set; }
     }
 }

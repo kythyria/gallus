@@ -16,5 +16,22 @@ namespace JsAnalyser
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+
+            string text;
+            using (var sr = new System.IO.StreamReader(openFileDialog1.FileName))
+            {
+                text = sr.ReadToEnd();
+            }
+
+            var parser = new Jint.Parser.JavaScriptParser();
+            var t1 = DateTime.Now;
+            var ast = parser.Parse(text);
+            var t2 = DateTime.Now;
+            System.Diagnostics.Debugger.Break();
+        }
     }
 }
