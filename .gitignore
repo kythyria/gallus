@@ -3,3 +3,5 @@ minitools/*.json
 *.pro.user
 login-browserui/login-browserui*
 login-browserui/login-browserui.pro.user*
+obj/
+bin/
