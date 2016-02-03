@@ -50,6 +50,7 @@
             this.tbxSkypeToken.Name = "tbxSkypeToken";
             this.tbxSkypeToken.Size = new System.Drawing.Size(222, 20);
             this.tbxSkypeToken.TabIndex = 0;
+            this.tbxSkypeToken.Leave += new System.EventHandler(this.tbxSkypeToken_Leave);
             // 
             // button1
             // 

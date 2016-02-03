@@ -25,7 +25,7 @@ namespace Sharpgallus
         public static string CalculateHeader()
         {
             string time = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds.ToString();
-            string token = Sharpgallus.LockAndKeyGen.Calculate(time);
+            string token = Calculate(time);
 
             return string.Format("appId={0}; time={1}; lockAndKeyResponse={2}", SkypeProductId, time, token);
         }

@@ -16,27 +16,13 @@ namespace DemonstrativeClient
     public partial class Form1 : Form
     {
         private Random rand = new Random();
+        private HttpClient client;
+        private SkypeApi api;
 
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private T ApiGetUrl<T>(string token, string url)
-        {
-            var req = WebRequest.Create(url);
-            req.Headers.Add("X-Skypetoken", token);
-
-            T result;
-
-            using (var response = (HttpWebResponse)req.GetResponse())
-            using(var tr = new System.IO.StreamReader(response.GetResponseStream()))
-            {
-                var json = tr.ReadToEnd();
-                result = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error });
-            }
-
-            return result;
+            client = new HttpClient();
         }
 
         private T MsgrGetUrl<T>(string token, string url)
@@ -57,16 +43,16 @@ namespace DemonstrativeClient
             return result;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-            var prof = ApiGetUrl<SelfProfile>(tbxSkypeToken.Text, "https://api.skype.com/users/self/profile");
+            var prof = await api.GetSelfProfile();
             tbxUid.Text = prof.Username;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
-            var contactUrl = string.Format("https://contacts.skype.com/contacts/v1/users/{0}/contacts", tbxUid.Text);
-            var contactResponse = ApiGetUrl<ContactResponse>(tbxSkypeToken.Text, contactUrl);
+            var contactResponse = await api.GetContactList(tbxUid.Text);
+            textBox4.AppendText(contactResponse.Contacts.Count.ToString());
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -107,6 +93,11 @@ namespace DemonstrativeClient
         private void button5_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void tbxSkypeToken_Leave(object sender, EventArgs e)
+        {
+            api = new SkypeApi(tbxSkypeToken.Text, client);
         }
     }
 }

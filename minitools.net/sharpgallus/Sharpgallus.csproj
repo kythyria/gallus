@@ -46,14 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contact.cs" />
-    <Compile Include="ContactManager.cs" />
     <Compile Include="ConversationResponse.cs" />
-    <Compile Include="EventPipe.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Http.cs" />
     <Compile Include="LockAndKeyGen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelfProfile.cs" />
-    <Compile Include="Session.cs" />
+    <Compile Include="SkypeApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
