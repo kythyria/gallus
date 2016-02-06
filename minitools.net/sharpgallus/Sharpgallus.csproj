@@ -49,6 +49,7 @@
     <Compile Include="ConversationResponse.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Http.cs" />
+    <Compile Include="IPageableResponse.cs" />
     <Compile Include="LockAndKeyGen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelfProfile.cs" />

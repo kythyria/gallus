@@ -31,7 +31,6 @@
             this.tbxSkypeToken = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.tbxUid = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tbxRegistrationToken = new System.Windows.Forms.TextBox();
@@ -40,8 +39,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tbxEpId = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
             this.textBox4 = new System.Windows.Forms.TextBox();
+            this.btnShowVisualiser = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnShowConvos = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbxSkypeToken
@@ -71,15 +72,6 @@
             this.button2.Text = "GetContactList";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(64, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Skypetoken";
             // 
             // tbxUid
             // 
@@ -150,16 +142,6 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(538, 64);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(108, 23);
-            this.button5.TabIndex = 12;
-            this.button5.Text = "StartEventLoop";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
             // textBox4
             // 
             this.textBox4.Location = new System.Drawing.Point(12, 93);
@@ -168,13 +150,43 @@
             this.textBox4.Size = new System.Drawing.Size(634, 311);
             this.textBox4.TabIndex = 13;
             // 
+            // btnShowVisualiser
+            // 
+            this.btnShowVisualiser.Location = new System.Drawing.Point(12, 64);
+            this.btnShowVisualiser.Name = "btnShowVisualiser";
+            this.btnShowVisualiser.Size = new System.Drawing.Size(64, 23);
+            this.btnShowVisualiser.TabIndex = 14;
+            this.btnShowVisualiser.Text = "Visualiser";
+            this.btnShowVisualiser.UseVisualStyleBackColor = true;
+            this.btnShowVisualiser.Click += new System.EventHandler(this.btnShowVisualiser_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(64, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Skypetoken";
+            // 
+            // btnShowConvos
+            // 
+            this.btnShowConvos.Location = new System.Drawing.Point(538, 64);
+            this.btnShowConvos.Name = "btnShowConvos";
+            this.btnShowConvos.Size = new System.Drawing.Size(108, 23);
+            this.btnShowConvos.TabIndex = 15;
+            this.btnShowConvos.Text = "ConvoView";
+            this.btnShowConvos.UseVisualStyleBackColor = true;
+            this.btnShowConvos.Click += new System.EventHandler(this.btnShowConvos_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(658, 416);
+            this.Controls.Add(this.btnShowConvos);
+            this.Controls.Add(this.btnShowVisualiser);
             this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.tbxEpId);
             this.Controls.Add(this.label4);
@@ -199,7 +211,6 @@
         private System.Windows.Forms.TextBox tbxSkypeToken;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbxUid;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbxRegistrationToken;
@@ -208,8 +219,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbxEpId;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Button btnShowVisualiser;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnShowConvos;
     }
 }
 

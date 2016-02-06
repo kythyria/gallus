@@ -21,19 +21,19 @@ namespace Sharpgallus
         public string SyncState;
 
         [JsonProperty("totalCount")]
-        public string Count;
+        public int Count;
     }
 
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
-    public class ConversationResponse
+    public class ConversationResponse : IPageableResponse<ConversationResponse>
     {
         [JsonProperty]
         private SyncedCollectionMetadata _metadata;
 
         public string BackwardLink { get { return _metadata.BackwardLink; } set { _metadata.BackwardLink = value; } }
-        public string ForwardLink  { get { return _metadata.ForwardLink; } set { _metadata.ForwardLink = value; } }
-        public string SyncState    { get { return _metadata.SyncState; }   set { _metadata.SyncState = value; } }
-        public string Count        { get { return _metadata.Count; } set       { _metadata.Count = value; } }
+        public string ForwardLink  { get { return _metadata.ForwardLink; }  set { _metadata.ForwardLink = value; } }
+        public string SyncState    { get { return _metadata.SyncState; }    set { _metadata.SyncState = value; } }
+        public int    Count        { get { return _metadata.Count; }        set { _metadata.Count = value; } }
         
         [JsonProperty]
         public List<ConversationUpdate> Conversations { get; set; }

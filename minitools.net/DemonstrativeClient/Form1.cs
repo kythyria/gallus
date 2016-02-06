@@ -18,11 +18,16 @@ namespace DemonstrativeClient
         private Random rand = new Random();
         private HttpClient client;
         private SkypeApi api;
+        private HttpVisualiser visualiser;
+        private ConversationListViewer convoListViewer;
 
         public Form1()
         {
             InitializeComponent();
             client = new HttpClient();
+            visualiser = new HttpVisualiser();
+            visualiser.SubscribeToClient(client);
+            convoListViewer = new ConversationListViewer();
         }
 
         private T MsgrGetUrl<T>(string token, string url)
@@ -55,26 +60,10 @@ namespace DemonstrativeClient
             textBox4.AppendText(contactResponse.Contacts.Count.ToString());
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object sender, EventArgs e)
         {
-            var req = WebRequest.Create("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints");
-            req.Method = "POST";
-            req.Headers.Add("Authentication", string.Format("skypetoken={0}",tbxSkypeToken.Text));
-            req.Headers.Add("LockAndKey", LockAndKeyGen.CalculateHeader());
-
-            using (var rs = req.GetRequestStream())
-            {
-                var bytes = Encoding.ASCII.GetBytes("{\"endpointFeatures\":\"Agent\"}");
-                rs.Write(bytes, 0, bytes.Length);
-            }
-
-            using (var res = (HttpWebResponse)req.GetResponse())
-            {
-                var rtheader = res.Headers["Set-RegistrationToken"];
-                var resplit = rtheader.Split(';').Select(i => i.TrimStart(' ').Split(new char[] { '=' } ,2));
-                tbxRegistrationToken.Text = resplit.First(i => i[0] == "registrationToken")[1];
-                tbxEpId.Text = resplit.First(i => i[0] == "endpointId")[1];
-            }
+            tbxEpId.Text = await api.CreateEndpoint();
+            tbxRegistrationToken.Text = api.RegistrationToken;
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -90,14 +79,19 @@ namespace DemonstrativeClient
             System.Diagnostics.Debugger.Break();
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void tbxSkypeToken_Leave(object sender, EventArgs e)
         {
             api = new SkypeApi(tbxSkypeToken.Text, client);
+        }
+
+        private void btnShowVisualiser_Click(object sender, EventArgs e)
+        {
+            visualiser.Show();
+        }
+
+        private void btnShowConvos_Click(object sender, EventArgs e)
+        {
+            convoListViewer.Show();
         }
     }
 }

@@ -57,6 +57,8 @@ namespace Sharpgallus
         public async Task<HttpProgressInfo> ExecuteRequestAsync(string url, Dictionary<string,string> headers = null, string method = "GET", JToken body = null)
         {
             var pi = new HttpProgressInfo();
+            pi.Url = new Uri(url);
+            pi.Method = method;
             pi.RequestHeaders = new WebHeaderCollection();
 
             var req = WebRequest.CreateHttp(url);
@@ -72,7 +74,7 @@ namespace Sharpgallus
             }
 
             pi.RequestBody = body == null ? null : body.DeepClone();
-            pi.ResponseStarted = DateTime.UtcNow;
+            pi.RequestStarted = DateTime.UtcNow;
             pi.State = HttpTransactionState.Started;
             OnProgress(pi);
 
@@ -104,6 +106,7 @@ namespace Sharpgallus
                 var dataText = await sr.ReadToEndAsync();
 
                 pi.State = HttpTransactionState.Complete;
+                pi.ResponseCompleted = DateTime.UtcNow;
 
                 if (!string.IsNullOrWhiteSpace(dataText))
                 {
