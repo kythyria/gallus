@@ -29,20 +29,21 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.listView1 = new System.Windows.Forms.ListView();
             this.chId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chLastMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chTopic = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.nudPageSize = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.btnGetInitial = new System.Windows.Forms.Button();
+            this.btnGetBack = new System.Windows.Forms.Button();
+            this.btnGetSync = new System.Windows.Forms.Button();
+            this.btnGetForward = new System.Windows.Forms.Button();
+            this.dtpDate = new System.Windows.Forms.DateTimePicker();
+            this.dtpTime = new System.Windows.Forms.DateTimePicker();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPageSize)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -53,15 +54,6 @@
             this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Start TS";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(61, 6);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(358, 20);
-            this.textBox1.TabIndex = 1;
             // 
             // listView1
             // 
@@ -74,6 +66,7 @@
             this.chType,
             this.chLastMessage,
             this.chTopic});
+            this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(12, 32);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(590, 188);
@@ -103,14 +96,14 @@
             this.chTopic.Text = "Topic";
             this.chTopic.Width = 95;
             // 
-            // numericUpDown1
+            // nudPageSize
             // 
-            this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericUpDown1.Location = new System.Drawing.Point(482, 6);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 3;
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.nudPageSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nudPageSize.Location = new System.Drawing.Point(482, 6);
+            this.nudPageSize.Name = "nudPageSize";
+            this.nudPageSize.Size = new System.Drawing.Size(120, 20);
+            this.nudPageSize.TabIndex = 3;
+            this.nudPageSize.Value = new decimal(new int[] {
             2,
             0,
             0,
@@ -126,64 +119,85 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "pageSize";
             // 
-            // button1
+            // btnGetInitial
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(12, 226);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Get Initial";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnGetInitial.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnGetInitial.Location = new System.Drawing.Point(12, 226);
+            this.btnGetInitial.Name = "btnGetInitial";
+            this.btnGetInitial.Size = new System.Drawing.Size(75, 23);
+            this.btnGetInitial.TabIndex = 5;
+            this.btnGetInitial.Text = "Get Initial";
+            this.btnGetInitial.UseVisualStyleBackColor = true;
+            this.btnGetInitial.Click += new System.EventHandler(this.btnGetInitial_Click);
             // 
-            // button2
+            // btnGetBack
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button2.Location = new System.Drawing.Point(93, 226);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Back";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnGetBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnGetBack.Location = new System.Drawing.Point(93, 226);
+            this.btnGetBack.Name = "btnGetBack";
+            this.btnGetBack.Size = new System.Drawing.Size(75, 23);
+            this.btnGetBack.TabIndex = 6;
+            this.btnGetBack.Text = "Get Back";
+            this.btnGetBack.UseVisualStyleBackColor = true;
+            this.btnGetBack.Click += new System.EventHandler(this.btnGetBack_Click);
             // 
-            // button3
+            // btnGetSync
             // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.Location = new System.Drawing.Point(174, 226);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 7;
-            this.button3.Text = "Get Sync";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnGetSync.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnGetSync.Location = new System.Drawing.Point(174, 226);
+            this.btnGetSync.Name = "btnGetSync";
+            this.btnGetSync.Size = new System.Drawing.Size(75, 23);
+            this.btnGetSync.TabIndex = 7;
+            this.btnGetSync.Text = "Get Sync";
+            this.btnGetSync.UseVisualStyleBackColor = true;
+            this.btnGetSync.Click += new System.EventHandler(this.btnGetSync_Click);
             // 
-            // button4
+            // btnGetForward
             // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button4.Location = new System.Drawing.Point(255, 226);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 8;
-            this.button4.Text = "Next";
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnGetForward.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnGetForward.Location = new System.Drawing.Point(255, 226);
+            this.btnGetForward.Name = "btnGetForward";
+            this.btnGetForward.Size = new System.Drawing.Size(75, 23);
+            this.btnGetForward.TabIndex = 8;
+            this.btnGetForward.Text = "Get Forward";
+            this.btnGetForward.UseVisualStyleBackColor = true;
+            this.btnGetForward.Click += new System.EventHandler(this.btnGetForward_Click);
+            // 
+            // dtpDate
+            // 
+            this.dtpDate.Location = new System.Drawing.Point(61, 6);
+            this.dtpDate.Name = "dtpDate";
+            this.dtpDate.Size = new System.Drawing.Size(225, 20);
+            this.dtpDate.TabIndex = 9;
+            // 
+            // dtpTime
+            // 
+            this.dtpTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dtpTime.Location = new System.Drawing.Point(292, 6);
+            this.dtpTime.Name = "dtpTime";
+            this.dtpTime.ShowUpDown = true;
+            this.dtpTime.Size = new System.Drawing.Size(127, 20);
+            this.dtpTime.TabIndex = 10;
             // 
             // ConversationListViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(614, 261);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.dtpTime);
+            this.Controls.Add(this.dtpDate);
+            this.Controls.Add(this.btnGetForward);
+            this.Controls.Add(this.btnGetSync);
+            this.Controls.Add(this.btnGetBack);
+            this.Controls.Add(this.btnGetInitial);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.nudPageSize);
             this.Controls.Add(this.listView1);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.Name = "ConversationListViewer";
             this.Text = "ConversationViewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConversationListViewer_FormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPageSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -192,18 +206,19 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader chId;
         private System.Windows.Forms.ColumnHeader chVersion;
         private System.Windows.Forms.ColumnHeader chType;
         private System.Windows.Forms.ColumnHeader chLastMessage;
         private System.Windows.Forms.ColumnHeader chTopic;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown nudPageSize;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnGetInitial;
+        private System.Windows.Forms.Button btnGetBack;
+        private System.Windows.Forms.Button btnGetSync;
+        private System.Windows.Forms.Button btnGetForward;
+        private System.Windows.Forms.DateTimePicker dtpDate;
+        private System.Windows.Forms.DateTimePicker dtpTime;
     }
 }

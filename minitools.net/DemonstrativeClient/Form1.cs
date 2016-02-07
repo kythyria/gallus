@@ -74,14 +74,21 @@ namespace DemonstrativeClient
             var result = MsgrGetUrl<ConversationResponse>(tbxRegistrationToken.Text, url);
 
             var s = result.Conversations[0];
-            int i = s.LastMessage.id;
 
             System.Diagnostics.Debugger.Break();
         }
 
         private void tbxSkypeToken_Leave(object sender, EventArgs e)
         {
-            api = new SkypeApi(tbxSkypeToken.Text, client);
+            if (api == null)
+            {
+                api = new SkypeApi(tbxSkypeToken.Text, client);
+                convoListViewer.Api = api;
+            }
+            else
+            {
+                api.SkypeToken = tbxSkypeToken.Text;
+            }
         }
 
         private void btnShowVisualiser_Click(object sender, EventArgs e)

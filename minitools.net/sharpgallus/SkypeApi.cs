@@ -61,7 +61,7 @@ namespace Sharpgallus
 
         public async Task<ConversationResponse> GetConversationView(DateTime startTime, int pageSize = 100)
         {
-            var urlFormat = "https://client-s.gateway.messenger.live.com/v1/users/ME/conversations?startTime={0}&pageSize=100&view=msnp24Equivalent&targetType=Passport%7CSkype%7CLync%7CThread%7CAgent";
+            var urlFormat = "https://client-s.gateway.messenger.live.com/v1/users/ME/conversations?startTime={0}&pageSize={1}&view=msnp24Equivalent&targetType=Passport%7CSkype%7CLync%7CThread%7CAgent";
             var url = string.Format(urlFormat, startTime.ToUnixTime(), pageSize);
 
             var result = await Client.ExecuteRequestAsync(url, _registrationTokenHeader);

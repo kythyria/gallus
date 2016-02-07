@@ -46,7 +46,7 @@ namespace Sharpgallus
         public string Id { get; set; }
 
         [JsonProperty("lastMessage")]
-        public dynamic LastMessage { get; set; }
+        public JObject LastMessage { get; set; }
 
         [JsonProperty("messages")]
         public Uri Messages { get; set; }
